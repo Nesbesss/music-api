@@ -16,7 +16,7 @@ health_ns = Namespace('health', description='Health checks')
 
 def register_namespaces(api: Api):
     """Register all namespaces with the API."""
-    from . import search, tracks, artists, albums, browse, lyrics, playlists, health
+    from . import search, tracks, artists, albums, browse, lyrics, playlists, health, player
     
     api.add_namespace(search_ns, path='/search')
     api.add_namespace(tracks_ns, path='/tracks')
@@ -26,10 +26,11 @@ def register_namespaces(api: Api):
     api.add_namespace(lyrics_ns, path='/lyrics')
     api.add_namespace(playlists_ns, path='/playlists')
     api.add_namespace(health_ns, path='/health')
+    api.add_namespace(player.player_ns, path='/player-docs')
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
-    from . import search, tracks, artists, albums, browse, lyrics, playlists, health
+    from . import search, tracks, artists, albums, browse, lyrics, playlists, health, player
     prefix = '/api/v1'
     
     app.register_blueprint(search.bp, url_prefix=prefix)
@@ -40,7 +41,8 @@ def register_blueprints(app):
     app.register_blueprint(lyrics.bp, url_prefix=prefix)
     app.register_blueprint(playlists.bp, url_prefix=prefix)
     app.register_blueprint(health.bp, url_prefix=prefix)
-    
+    app.register_blueprint(player.bp, url_prefix='/player')
+
     # Public routes (landing redirect etc)
     from . import public
     app.register_blueprint(public.bp)

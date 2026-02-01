@@ -1,0 +1,57 @@
+#!/bin/bash
+
+# novam - Project Nova CLI Management Tool
+# Usage: novam [api|player|update|status]
+
+# Resolve script directory to handle relative paths
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+PROJECT_ROOT="$SCRIPT_DIR"
+
+cd "$PROJECT_ROOT"
+
+# Load virtual environment if it exists
+if [ -d "venv" ]; then
+    source venv/bin/activate
+fi
+
+case "$1" in
+    api)
+        echo "🚀 Starting Project Nova API Service..."
+        python3 core/run.py
+        ;;
+    player)
+        # Check if engine is running
+        if ! curl -s http://localhost:5001/api/v1/health > /dev/null; then
+            echo "⚙️  Nova Engine is not running. Starting it in background..."
+            nohup python3 core/run.py > core.log 2>&1 &
+            echo "⏳ Waiting for engine to warm up..."
+            sleep 4
+        fi
+        echo "🎵 Opening Nova Player..."
+        open http://localhost:5001/player
+        ;;
+    update)
+        echo "🔄 Checking for Project Nova updates..."
+        git pull origin main
+        echo "✅ Update complete."
+        ;;
+    status)
+        if curl -s http://localhost:5001/api/v1/health > /dev/null; then
+            echo "🟢 Nova Engine: RUNNING"
+            echo "🔗 Local Endpoint: http://localhost:5001"
+            echo "🔗 Player UI: http://localhost:5001/player"
+        else
+            echo "🔴 Nova Engine: OFFLINE"
+        fi
+        ;;
+    *)
+        echo "Usage: novam {api|player|update|status}"
+        echo ""
+        echo "Commands:"
+        echo "  api      Start the core API service"
+        echo "  player   Start the service (if needed) and open the web player"
+        echo "  update   Pull the latest features from GitHub"
+        echo "  status   Check if the Nova Engine is healthy"
+        exit 1
+        ;;
+esac
