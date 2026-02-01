@@ -30,7 +30,7 @@ def register_namespaces(api: Api):
 
 def register_blueprints(app):
     """Register all blueprints with the Flask app."""
-    from . import search, tracks, artists, albums, browse, lyrics, playlists, health, player
+    from . import search, tracks, artists, albums, browse, lyrics, playlists, health, player, compat
     prefix = '/api/v1'
     
     app.register_blueprint(search.bp, url_prefix=prefix)
@@ -42,6 +42,7 @@ def register_blueprints(app):
     app.register_blueprint(playlists.bp, url_prefix=prefix)
     app.register_blueprint(health.bp, url_prefix=prefix)
     app.register_blueprint(player.bp, url_prefix='/player')
+    app.register_blueprint(compat.bp)
 
     # Public routes (landing redirect etc)
     from . import public

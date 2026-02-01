@@ -8,8 +8,8 @@ bp = Blueprint('public', __name__)
 
 @bp.route('/')
 def index():
-    """Redirect home to Swagger docs."""
-    return redirect('/docs')
+    """Redirect home to Player UI."""
+    return redirect('/player/')
 
 @bp.route('/health')
 def health_redirect():

@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova | Zero-Gate Music Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --accent: #3b82f6;
+            /* Electric Blue */
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --code-bg: #0a0a0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Moving Star Background */
+        .page-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+        }
+
+        .mesh-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #1e1b4b 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #082f49 0%, transparent 40%);
+            filter: blur(80px) brightness(0.7);
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            max-width: 1140px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-transform: uppercase;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .github-stars {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 4px 12px;
+            border-radius: 10px;
+            gap: 10px;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .github-stars:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 120px 0 160px;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: clamp(48px, 10vw, 110px);
+            font-weight: 800;
+            letter-spacing: -5px;
+            line-height: 0.85;
+            margin-bottom: 32px;
+            background: linear-gradient(180deg, #fff 50%, rgba(255, 255, 255, 0.5));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 56px;
+            font-weight: 400;
+        }
+
+        .command-bar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 14px 28px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            backdrop-filter: blur(30px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            font-size: 15px;
+        }
+
+        .command-bar span:first-child {
+            color: var(--accent);
+        }
+
+        .copy-trigger {
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+        }
+
+        .copy-trigger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        /* Interactive Docs */
+        .docs-wrapper {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            backdrop-filter: blur(20px);
+            margin-bottom: 160px;
+            min-height: 600px;
+        }
+
+        .docs-nav {
+            background: rgba(255, 255, 255, 0.01);
+            border-right: 1px solid var(--glass-border);
+            padding: 40px;
+        }
+
+        .docs-nav h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 14px 20px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
+            text-align: left;
+            cursor: pointer;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+        }
+
+        .docs-main {
+            padding: 60px;
+            position: relative;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .docs-main h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .docs-main p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            margin-bottom: 40px;
+        }
+
+        /* Endpoint UI */
+        .endpoint-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .badge-method {
+            padding: 6px 10px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .endpoint-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .code-container {
+            background: var(--code-bg);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            border: 1px solid var(--glass-border);
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .token-attr {
+            color: #f472b6;
+        }
+
+        .token-str {
+            color: #34d399;
+        }
+
+        .token-com {
+            color: #64748b;
+        }
+
+        /* Error Codes Table */
+        .error-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .error-table th {
+            text-align: left;
+            padding: 16px;
+            border-bottom: 2px solid var(--glass-border);
+            color: #fff;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .error-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0 60px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .docs-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .docs-nav {
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+                padding: 24px;
+            }
+
+            .docs-main {
+                padding: 40px 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-canvas">
+        <div class="mesh-gradient"></div>
+        <canvas id="starfield"></canvas>
+    </div>
+
+    <div class="container">
+        <nav>
+            <div class="logo"><img src="logo.png" alt="Nova Logo"> NOVA</div>
+            <div class="nav-links">
+                <a href="#docs">Documentation</a>
+                <a href="https://github.com/Nesbesss/music-api" class="github-stars">
+                    <svg height="20" viewBox="0 0 16 16" width="20" fill="currentColor">
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                        </path>
+                    </svg>
+                    <span>Nova Core</span>
+                    <span id="star-count" style="color: var(--accent);">★ Repo</span>
+                </a>
+            </div>
+        </nav>
+
+        <section class="hero">
+            <div class="badge">v1.2.0 • Project Nova</div>
+            <h1>The Music Meta.<br>No Gatekeepers.</h1>
+            <p class="subtitle">Search, stream, and manage your music meta with a single command. Project Nova is a
+                local-first ecosystem featuring the <strong>novam</strong> CLI and <strong>Nova Player</strong> UI.</p>
+
+            <div class="command-bar">
+                <span>$</span>
+                <input type="text" id="nova-search" placeholder="Search track, artist, album..."
+                    style="background: transparent; border: none; color: #fff; font-family: inherit; font-size: 15px; width: 300px; outline: none;">
+                <button class="copy-trigger" onclick="handleSearch()">Search</button>
+            </div>
+            <div id="search-results"
+                style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; opacity: 0; transition: opacity 0.5s;">
+            </div>
+        </section>
+
+        <!-- Premium Player Overlay -->
+        <div id="player-overlay"
+            style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 1000; display: none; flex-direction: column; align-items: center; justify-content: center; overflow: hidden;">
+            <div class="page-canvas" style="z-index: 0;">
+                <div class="mesh-gradient" style="background: radial-gradient(circle at center, #1e1b4b 0%, #000 70%);">
+                </div>
+                <canvas id="player-starfield"></canvas>
+            </div>
+
+            <button onclick="closePlayer()"
+                style="position: absolute; top: 30px; right: 30px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: #fff; padding: 10px 20px; border-radius: 12px; cursor: pointer; z-index: 10;">Close
+                [Esc]</button>
+
+            <div id="player-content" style="z-index: 1; text-align: center; max-width: 800px; width: 90%;">
+                <div id="album-art-container"
+                    style="width: 300px; height: 300px; margin: 0 auto 40px; position: relative;">
+                    <img id="player-art" src=""
+                        style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; box-shadow: 0 0 50px rgba(59, 130, 246, 0.5); animation: rotate 20s linear infinite;">
+                    <div
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 60px; height: 60px; background: #000; border-radius: 50%; border: 4px solid #111;">
+                    </div>
+                </div>
+
+                <h2 id="player-title" style="font-size: 32px; font-weight: 800; margin-bottom: 8px;"></h2>
+                <p id="player-artist"
+                    style="color: var(--accent); font-size: 18px; font-weight: 600; margin-bottom: 40px;"></p>
+
+                <div id="lyrics-container"
+                    style="height: 150px; overflow-y: hidden; font-size: 24px; font-weight: 700; color: rgba(255,255,255,0.5); position: relative;">
+                    <div id="lyrics-scroller" style="transition: transform 0.3s ease;">
+                        <p id="current-lyrics">Syncing lyrics...</p>
+                    </div>
+                </div>
+
+                <div class="player-controls"
+                    style="margin-top: 60px; display: flex; align-items: center; justify-content: center; gap: 20px; width: 100%;">
+                    <audio id="main-audio" style="display: none;"></audio>
+
+                    <span id="time-current"
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-secondary); min-width: 45px;">0:00</span>
+
+                    <div id="progress-container" onclick="seekAudio(event)"
+                        style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; position: relative;">
+                        <div id="progress-bar"
+                            style="width: 0%; height: 100%; background: linear-gradient(90deg, var(--accent), #8b5cf6); border-radius: 4px; box-shadow: 0 0 15px var(--accent-glow); transition: width 0.1s;">
+                        </div>
+                    </div>
+
+                    <span id="time-total"
+                        style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--text-secondary); min-width: 45px;">0:00</span>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; align-items: center; justify-content: center; gap: 30px;">
+                    <button id="play-pause-btn" onclick="togglePlayPause()"
+                        style="width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #8b5cf6); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px var(--accent-glow); transition: transform 0.2s;">
+                        <svg id="play-icon" width="28" height="28" viewBox="0 0 24 24" fill="white"
+                            style="display: none;">
+                            <polygon points="5,3 19,12 5,21"></polygon>
+                        </svg>
+                        <svg id="pause-icon" width="28" height="28" viewBox="0 0 24 24" fill="white">
+                            <rect x="6" y="4" width="4" height="16"></rect>
+                            <rect x="14" y="4" width="4" height="16"></rect>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <style>
+            @keyframes rotate {
+                from {
+                    transform: rotate(0deg);
+                }
+
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .track-card {
+                background: var(--glass-bg);
+                border: 1px solid var(--glass-border);
+                border-radius: 20px;
+                padding: 15px;
+                transition: all 0.3s;
+                cursor: pointer;
+                text-align: left;
+            }
+
+            .track-card:hover {
+                transform: translateY(-5px);
+                background: rgba(255, 255, 255, 0.08);
+                border-color: var(--accent);
+            }
+
+            .track-card img {
+                width: 100%;
+                aspect-ratio: 1;
+                border-radius: 12px;
+                object-fit: cover;
+                margin-bottom: 12px;
+            }
+
+            .track-card h4 {
+                font-size: 15px;
+                font-weight: 700;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                margin-bottom: 4px;
+            }
+
+            .track-card p {
+                font-size: 13px;
+                color: var(--text-secondary);
+            }
+        </style>
+
+        <div id="docs" class="docs-wrapper">
+            <aside class="docs-nav">
+                <h3>Guides</h3>
+                <button class="tab-btn active" onclick="showTab('concepts')">✦ Core Concepts</button>
+                <button class="tab-btn" onclick="showTab('search')">✦ Search API</button>
+                <button class="tab-btn" onclick="showTab('tracks')">✦ Tracks & Streaming</button>
+                <button class="tab-btn" onclick="showTab('browse')">✦ Browse & Moods</button>
+                <button class="tab-btn" onclick="showTab('sdk')">✦ Python SDK</button>
+                <button class="tab-btn" onclick="showTab('cli')">✦ Nova CLI</button>
+                <button class="tab-btn" onclick="showTab('errors')">✦ Error Codes</button>
+            </aside>
+
+            <main class="docs-main">
+                <!-- Core Concepts -->
+                <div id="tab-concepts" class="tab-content active">
+                    <h2>Core Concepts</h2>
+                    <p>Nova is built on the philosophy of "Zero-Gate" development. We remove the middleman between you
+                        and your music metadata. Run it locally via <code>novam</code> and search instantly via the
+                        <strong>Nova Player</strong>.
+                    </p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #22c55e;">INFO</span>
+                            <span class="endpoint-path">Zero Configuration</span>
+                        </div>
+                        <p style="font-size: 15px; margin-bottom: 0;">Nova runs locally or in a private container.
+                            Default access is anonymous—no API keys or headers required in development mode.</p>
+                    </div>
+                </div>
+
+                <!-- Search API -->
+                <div id="tab-search" class="tab-content">
+                    <h2>Search API</h2>
+                    <p>Powerful multi-source search for tracks, artists, and albums with deep formatting.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/search?q={query}&limit=20</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"tracks"</span>: [
+      {
+        <span class="token-attr">"id"</span>: <span class="token-str">"wPqTMRYtyMw"</span>,
+        <span class="token-attr">"name"</span>: <span class="token-str">"SOLANA"</span>,
+        <span class="token-attr">"artists"</span>: [<span class="token-str">"Alex LeMirage"</span>],
+        <span class="token-attr">"album"</span>: <span class="token-str">"Music from the Stars"</span>
+      }
+    ]
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tracks API -->
+                <div id="tab-tracks" class="tab-content">
+                    <h2>Tracks & Streaming</h2>
+                    <p>The core of Nova. High-fidelity audio streaming with metadata parity.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #f59e0b;">STREAM</span>
+                            <span class="endpoint-path">/api/v1/tracks/stream/{id}</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns an optimized <code>audio/webm</code> or
+                            <code>audio/m4a</code> stream directly from the engine.
+                        </p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/tracks/{id}</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns detailed metadata, including high-res thumbnails and track
+                            duration.</p>
+                    </div>
+                </div>
+
+                <!-- Browse API -->
+                <div id="tab-browse" class="tab-content">
+                    <h2>Browse & Moods</h2>
+                    <p>Explore charts, trending songs, and categorized genre playlists.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/browse/trending?region=US</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/browse/genres</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SDK Usage -->
+                <div id="tab-sdk" class="tab-content">
+                    <h2>Python SDK</h2>
+                    <p>The most elegant way to interact with Nova. Zero-config by default.</p>
+                    <div class="code-container">
+                        <pre><code><span class="token-com"># Installation: pip install nova-music-sdk</span>
+<span class="token-keyword">from</span> nova <span class="token-keyword">import</span> NovaClient
+
+<span class="token-com"># Connect to local core</span>
+client = NovaClient()
+
+<span class="token-com"># Integrated search & stream</span>
+results = client.search(<span class="token-str">"Solana"</span>)
+track_url = client.get_stream_url(results[<span class="token-str">'data'</span>][<span class="token-str">'tracks'</span>][<span class="token-number">0</span>][<span class="token-str">'id'</span>])</code></pre>
+                    </div>
+                </div>
+
+                <!-- Nova CLI -->
+                <div id="tab-cli" class="tab-content">
+                    <h2>Nova CLI (novam)</h2>
+                    <p>The <code>novam</code> utility is the heartbeat of the Nova ecosystem. Manage your engine,
+                        player, and updates from the terminal.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: var(--accent);">novam player</span>
+                            <span class="endpoint-path">Open Music UI</span>
+                        </div>
+                        <p style="font-size: 14px;">Automatically starts the engine and opens the <strong>Nova
+                                Player</strong> in your browser.</p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #22c55e;">novam api</span>
+                            <span class="endpoint-path">Headless Mode</span>
+                        </div>
+                        <p style="font-size: 14px;">Starts the core API server for background service integrations.</p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #f59e0b;">novam update</span>
+                            <span class="endpoint-path">Sync Features</span>
+                        </div>
+                        <p style="font-size: 14px;">Pulls the latest engine improvements and security patches from
+                            GitHub.</p>
+                    </div>
+                </div>
+
+                <!-- Error Codes -->
+                <div id="tab-errors" class="tab-content">
+                    <h2>Error Codes</h2>
+                    <p>Nova uses structured JSON error responses with unique codes for debugging.</p>
+                    <table class="error-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Context</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">TRACK_ERROR</td>
+                                <td>500</td>
+                                <td>Upstream source unreachable.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">MISSING_QUERY</td>
+                                <td>400</td>
+                                <td>Search requires the 'q' parameter.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">FORBIDDEN</td>
+                                <td>403</td>
+                                <td>IP blocked or API Key invalid.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">NOT_FOUND</td>
+                                <td>404</td>
+                                <td>The requested entity was not found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <div class="logo" style="justify-content: center; margin-bottom: 24px;">
+                <img src="logo.png" alt="Nova Logo"> NOVA
+            </div>
+            <p style="color: var(--text-secondary); font-size: 14px;">Project Nova &bull; MIT Licensed &bull; Created by
+                <a href="https://github.com/Nesbesss" style="color: #fff; text-decoration: none;">@Nesbesss</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Starfield Effect
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor(window.innerWidth / 10);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y -= star.speed;
+                if (star.y < -10) star.y = canvas.height + 10;
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+        // Hybrid Player Logic
+        let currentTrack = null;
+        const playerOverlay = document.getElementById('player-overlay');
+        const audio = document.getElementById('main-audio');
+        const searchInput = document.getElementById('nova-search');
+        const resultsContainer = document.getElementById('search-results');
+
+        async function handleSearch() {
+            const query = searchInput.value.trim();
+            if (!query) return;
+
+            resultsContainer.style.opacity = '0.5';
+            try {
+                const res = await fetch(`/api/v1/search?q=${encodeURIComponent(query)}`);
+                const json = await res.json();
+                const tracks = json.data.tracks;
+
+                resultsContainer.innerHTML = '';
+                tracks.forEach(track => {
+                    const card = document.createElement('div');
+                    card.className = 'track-card';
+                    card.onclick = () => playTrack(track);
+                    card.innerHTML = `
+                        <img src="${track.album.images[0].url}" alt="${track.name}">
+                        <h4>${track.name}</h4>
+                        <p>${track.artists[0].name}</p>
+                    `;
+                    resultsContainer.appendChild(card);
+                });
+                resultsContainer.style.opacity = '1';
+                resultsContainer.scrollIntoView({ behavior: 'smooth' });
+            } catch (err) {
+                console.error('Search failed', err);
+            }
+        }
+
+        searchInput.onkeypress = (e) => { if (e.key === 'Enter') handleSearch(); };
+
+        async function playTrack(track) {
+            currentTrack = track;
+            document.getElementById('player-title').innerText = track.name;
+            document.getElementById('player-artist').innerText = track.artists[0].name;
+            document.getElementById('player-art').src = track.album.images[0].url;
+
+            playerOverlay.style.display = 'flex';
+            audio.src = `/api/v1/tracks/stream/${track.id}`;
+            audio.play();
+
+            // Init Player Stars
+            initPlayerStars();
+
+            // Start Progress Tracking
+            updateProgress();
+
+            // Fetch Lyrics
+            fetchLyrics(track.id);
+        }
+
+        function closePlayer() {
+            playerOverlay.style.display = 'none';
+            audio.pause();
+        }
+
+        window.onkeydown = (e) => { if (e.key === 'Escape') closePlayer(); };
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function updateProgress() {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            document.getElementById('progress-bar').style.width = (isNaN(pct) ? 0 : pct) + '%';
+            document.getElementById('time-current').innerText = formatTime(audio.currentTime);
+            document.getElementById('time-total').innerText = formatTime(audio.duration);
+            requestAnimationFrame(updateProgress);
+        }
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                audio.play();
+                document.getElementById('play-icon').style.display = 'none';
+                document.getElementById('pause-icon').style.display = 'block';
+            } else {
+                audio.pause();
+                document.getElementById('play-icon').style.display = 'block';
+                document.getElementById('pause-icon').style.display = 'none';
+            }
+        }
+
+        function seekAudio(event) {
+            const bar = document.getElementById('progress-container');
+            const rect = bar.getBoundingClientRect();
+            const pct = (event.clientX - rect.left) / rect.width;
+            audio.currentTime = pct * audio.duration;
+        }
+
+        async function fetchLyrics(id) {
+            const container = document.getElementById('current-lyrics');
+            container.innerText = 'Searching for lyrics...';
+            try {
+                const res = await fetch(`/api/lyrics/${id}`);
+                const json = await res.json();
+                const data = json.data;
+                if (data.lyrics) {
+                    container.innerText = data.lyrics.split('\n')[0] || 'Enjoy the music 🎵';
+                } else {
+                    container.innerText = 'Lyrics not found 🛸';
+                }
+            } catch (e) {
+                container.innerText = 'Enjoy the music 🎵';
+            }
+        }
+
+        // Player Starfield
+        const playerCanvas = document.getElementById('player-starfield');
+        const pctx = playerCanvas.getContext('2d');
+        let pstars = [];
+
+        function initPlayerStars() {
+            playerCanvas.width = window.innerWidth;
+            playerCanvas.height = window.innerHeight;
+            pstars = [];
+            for (let i = 0; i < 200; i++) {
+                pstars.push({
+                    x: Math.random() * playerCanvas.width,
+                    y: Math.random() * playerCanvas.height,
+                    z: Math.random() * playerCanvas.width,
+                    size: Math.random() * 2
+                });
+            }
+            animatePlayer();
+        }
+
+        function animatePlayer() {
+            if (playerOverlay.style.display === 'none') return;
+            pctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+            pctx.fillRect(0, 0, playerCanvas.width, playerCanvas.height);
+            pctx.fillStyle = '#fff';
+
+            pstars.forEach(star => {
+                const x = (star.x - playerCanvas.width / 2) * (playerCanvas.width / star.z) + playerCanvas.width / 2;
+                const y = (star.y - playerCanvas.height / 2) * (playerCanvas.width / star.z) + playerCanvas.height / 2;
+                const s = (1 - star.z / playerCanvas.width) * 3;
+
+                pctx.beginPath();
+                pctx.arc(x, y, s, 0, Math.PI * 2);
+                pctx.fill();
+
+                star.z -= 4;
+                if (star.z <= 0) star.z = playerCanvas.width;
+            });
+            requestAnimationFrame(animatePlayer);
+        }
+    </script>
+</body>
+
+</html>

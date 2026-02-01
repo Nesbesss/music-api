@@ -14,44 +14,53 @@ if [ -d "venv" ]; then
     source venv/bin/activate
 fi
 
+# Colors for UI
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+RED='\033[0;31m'
+NC='\033[0m' # No Color
+
 case "$1" in
     api)
-        echo "🚀 Starting Project Nova API Service..."
+        echo -e "${BLUE}🚀 Starting Project Nova API Service...${NC}"
         python3 core/run.py
         ;;
-    player)
+    player|dashboard)
         # Check if engine is running
         if ! curl -s http://localhost:5001/api/v1/health > /dev/null; then
-            echo "⚙️  Nova Engine is not running. Starting it in background..."
+            echo -e "${BLUE}⚙️  Nova Engine is not running. Starting it in background...${NC}"
+            # Kill any zombie processes on port 5001
+            lsof -ti :5001 | xargs kill -9 2>/dev/null || true
             nohup python3 core/run.py > core.log 2>&1 &
-            echo "⏳ Waiting for engine to warm up..."
-            sleep 4
+            echo -e "${BLUE}⏳ Waiting for engine to warm up...${NC}"
+            sleep 3
         fi
-        echo "🎵 Opening Nova Player..."
-        open http://localhost:5001/player
+        echo -e "${GREEN}🎵 Opening Nova Dashboard...${NC}"
+        open http://localhost:5001/player/
         ;;
     update)
-        echo "🔄 Checking for Project Nova updates..."
+        echo -e "${BLUE}🔄 Checking for Project Nova updates...${NC}"
         git pull origin main
-        echo "✅ Update complete."
+        echo -e "${GREEN}✅ Update complete.${NC}"
         ;;
     status)
         if curl -s http://localhost:5001/api/v1/health > /dev/null; then
-            echo "🟢 Nova Engine: RUNNING"
-            echo "🔗 Local Endpoint: http://localhost:5001"
-            echo "🔗 Player UI: http://localhost:5001/player"
+            echo -e "${GREEN}🟢 Nova Engine: RUNNING${NC}"
+            echo -e "${BLUE}🔗 API Endpoint:${NC} http://localhost:5001/api/v1"
+            echo -e "${BLUE}🔗 Dashboard:${NC}    http://localhost:5001/player/"
         else
-            echo "🔴 Nova Engine: OFFLINE"
+            echo -e "${RED}🔴 Nova Engine: OFFLINE${NC}"
         fi
         ;;
     *)
-        echo "Usage: novam {api|player|update|status}"
+        echo -e "${BLUE}Project Nova Management Tool${NC}"
+        echo "Usage: ./novam {api|dashboard|update|status}"
         echo ""
         echo "Commands:"
-        echo "  api      Start the core API service"
-        echo "  player   Start the service (if needed) and open the web player"
-        echo "  update   Pull the latest features from GitHub"
-        echo "  status   Check if the Nova Engine is healthy"
+        echo "  api        Start the core API service (foreground)"
+        echo "  dashboard  Launch the Nova Dashboard (search, play, lyrics)"
+        echo "  update     Sync with latest features from GitHub"
+        echo "  status     Check health and endpoints"
         exit 1
         ;;
 esac
