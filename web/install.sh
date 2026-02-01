@@ -47,10 +47,18 @@ fi
 # 2. Download / Init project
 echo -e "📦 Initializing Nova Environment..."
 if [ ! -d ".git" ]; then
-    git clone https://github.com/Nesbesss/music-api.git .
+    if [ -z "$(ls -A 2>/dev/null)" ]; then
+        git clone https://github.com/Nesbesss/music-api.git .
+    else
+        echo "⚠️  Directory is not empty. Synchronizing Nova into current path..."
+        git init -q
+        git remote add origin https://github.com/Nesbesss/music-api.git || git remote set-url origin https://github.com/Nesbesss/music-api.git
+        git fetch -q --all
+        git checkout -f main -q
+    fi
 else
     echo "♻️  Directory already exists. Syncing latest Nova features..."
-    git pull origin main || echo "⚠️  Already up to date."
+    git pull origin main -q || echo "⚠️  Already up to date."
 fi
 
 # 3. Virtual Environment Setup
