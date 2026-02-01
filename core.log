@@ -35,3 +35,25 @@
 127.0.0.1 - - [01/Feb/2026 21:17:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
 [2026-02-01 21:17:34,420] WARNING in cache: Redis unavailable, using memory cache: No module named 'redis'
 127.0.0.1 - - [01/Feb/2026 21:17:35] "GET /api/v1/search?q=Starboy HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:28:32] "GET /api/v1/health HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:28:32] "GET /player/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:28:32] "[36mGET /static/logo.png HTTP/1.1[0m" 304 -
+127.0.0.1 - - [01/Feb/2026 21:28:36] "GET /api/v1/search?q=gata%20only HTTP/1.1" 200 -
+Deprecated Feature: Support for Python version 3.9 has been deprecated. Please update to Python 3.10 or above
+127.0.0.1 - - [01/Feb/2026 21:28:39] "[35m[1mGET /api/v1/tracks/stream/UWn9RdueB7E HTTP/1.1[0m" 206 -
+127.0.0.1 - - [01/Feb/2026 21:28:40] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+[2026-02-01 21:29:14,571] ERROR in error_handler: Unhandled exception: invalid literal for int() with base 10: '1Anchor'
+Traceback (most recent call last):
+  File "/Users/nesbes/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+  File "/Users/nesbes/Library/Python/3.9/lib/python/site-packages/flask/app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+  File "/Users/nesbes/prive-code/music-api/core/app/services/auth.py", line 23, in decorated
+    return f(*args, **kwargs)
+  File "/Users/nesbes/prive-code/music-api/core/app/routes/search.py", line 73, in search
+    limit = min(int(request.args.get('limit', 20)), 50)
+ValueError: invalid literal for int() with base 10: '1Anchor'
+127.0.0.1 - - [01/Feb/2026 21:29:14] "[35m[1mGET /api/v1/search?q=Starboy&limit=1Anchor HTTP/1.1[0m" 500 -
+127.0.0.1 - - [01/Feb/2026 21:29:26] "GET /api/v1/health HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:29:33] "GET /api/v1/search?q=Starboy&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:29:34] "GET /api/v1/health HTTP/1.1" 200 -

@@ -350,23 +350,26 @@
                 const card = document.createElement('div');
                 card.className = 'track-card';
                 const artistsList = track.artists.map(a => typeof a === 'object' ? a.name : a).join(', ');
+                const coverUrl = (track.album && track.album.images && track.album.images.length > 0)
+                    ? track.album.images[0].url
+                    : '';
                 card.innerHTML = `
-                    <img class="track-thumb" src="${track.thumbnails ? track.thumbnails[0].url : ''}">
+                    <img class="track-thumb" src="${coverUrl}">
                     <div class="track-info">
                         <h3>${track.name}</h3>
                         <p>${artistsList}</p>
                     </div>
                 `;
-                card.onclick = () => playTrack(track, artistsList);
+                card.onclick = () => playTrack(track, artistsList, coverUrl);
                 resultsGrid.appendChild(card);
             });
         }
 
-        function playTrack(track, artistStr) {
+        function playTrack(track, artistStr, coverUrl) {
             audio.src = `/api/v1/tracks/stream/${track.id}`;
             audio.play();
             playBtn.innerText = '⏸';
-            document.getElementById('current-thumb').src = track.thumbnails ? track.thumbnails[0].url : '';
+            document.getElementById('current-thumb').src = coverUrl;
             document.getElementById('current-title').innerText = track.name;
             document.getElementById('current-artist').innerText = artistStr;
         }
