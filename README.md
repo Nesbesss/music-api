@@ -18,11 +18,21 @@ Run this command in your terminal to automatically detect your system and set up
 curl -sSL https://nesbes.me/install.sh | bash
 ```
 
-### Manual Setup
-1. Clone the repository: `git clone https://github.com/Nesbesss/music-api.git`
-2. Enter the core directory: `cd music-api/core`
-3. Install dependencies: `pip install -r requirements.txt`
-4. Run the server: `python run.py`
+### ⚡️ The Nova Manager (`novam`)
+Nova is managed via the official `novam` utility. After installation, use these commands to control your engine:
+
+- **`./novam player`**: Starts the engine and opens the **Nova Player** (Local UI).
+- **`./novam api`**: Starts the core API in headless mode.
+- **`./novam status`**: Checks if the engine is running and healthy.
+- **`./novam update`**: Pulls the latest features and security updates.
+
+### Manual Setup (Legacy)
+1. Clone: `git clone https://github.com/Nesbesss/music-api.git`
+2. Core: `cd core && pip install -r requirements.txt`
+3. Run: `python run.py`
+
+## 🎵 Nova Player
+Nova now includes a built-in, glassmorphic music player served at `http://localhost:5001/player`. It features real-time search, instant streaming, and a starfield aesthetic matching our landing page.
 
 ## 🧰 Python SDK
 Get started in seconds with our official Python SDK:
