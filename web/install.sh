@@ -22,7 +22,7 @@ echo -e "This software is for personal study and educational purposes only."
 echo -e "Usage of this tool for copyright-infringing activities is strictly prohibited."
 echo -e "The developers are not responsible for any misuse or legal consequences."
 echo -en "\n\033[1;36mDo you take full responsibility for your usage of Project Nova? (y/n): \033[0m"
-read -n 1 -r
+read -n 1 -r < /dev/tty
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
     echo -e "\n🛑 Installation aborted. You must accept the terms to use Nova."
@@ -86,7 +86,7 @@ echo -e "👉 \033[1;36m./novam status\033[0m  - Check engine health"
 echo -e "----------------------------------------"
 
 echo -en "\n🚀 \033[1;35mWould you like to open Nova Player right now? (y/n): \033[0m"
-read -n 1 -r
+read -n 1 -r < /dev/tty
 echo ""
 if [[ $REPLY =~ ^[Yy]$ ]]; then
     ./novam player
