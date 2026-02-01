@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+
+# Databases
+*.db
+*.sqlite3
+
+# Environment
+.env
+.venv
+venv/
+ENV/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project Specific
+core/cache/
+core/downloads/
+core/instance/
+core/*.db
+core/.env
+core/playlist_shares/
+
+# Gemini/Brain (Internal)
+.gemini/
+brain/
