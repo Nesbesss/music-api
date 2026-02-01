@@ -4,262 +4,692 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Music API | Zero-Gate Local Developer Platform</title>
+    <title>Nova | Zero-Gate Music Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <style>
         :root {
-            --bg: #000000;
-            --text: #ffffff;
-            --accent: #d946ef;
-            --muted: #888888;
-            --card-bg: rgba(255, 255, 255, 0.05);
-            --border: rgba(255, 255, 255, 0.1);
+            --bg-deep: #050505;
+            --accent: #3b82f6;
+            /* Electric Blue */
+            --accent-glow: rgba(59, 130, 246, 0.4);
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --code-bg: #0a0a0b;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
         }
 
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
+            background-color: var(--bg-deep);
+            color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
+        /* Moving Star Background */
+        .page-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: #000;
+        }
+
+        .mesh-gradient {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background:
+                radial-gradient(circle at 20% 20%, #1e1b4b 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, #082f49 0%, transparent 40%);
+            filter: blur(80px) brightness(0.7);
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
         .container {
-            max-width: 1000px;
+            max-width: 1140px;
             margin: 0 auto;
             padding: 0 24px;
         }
 
-        header {
-            padding: 40px 0;
+        /* Navigation */
+        nav {
+            height: 90px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 60px;
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .logo {
             font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
+            font-weight: 800;
+            letter-spacing: -1px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            text-transform: uppercase;
+        }
+
+        .logo img {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px var(--accent-glow);
         }
 
         .logo span {
             color: var(--accent);
         }
 
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #fff;
+        }
+
+        .github-stars {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            padding: 4px 12px;
+            border-radius: 10px;
+            gap: 10px;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .github-stars:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Hero */
         .hero {
-            padding: 100px 0;
+            padding: 120px 0 160px;
             text-align: center;
         }
 
-        h1 {
-            font-size: 64px;
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 100px;
+            color: var(--accent);
+            font-size: 12px;
             font-weight: 700;
-            letter-spacing: -2px;
-            margin-bottom: 24px;
-            background: linear-gradient(to right, #fff, #888);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 32px;
+        }
+
+        h1 {
+            font-size: clamp(48px, 10vw, 110px);
+            font-weight: 800;
+            letter-spacing: -5px;
+            line-height: 0.85;
+            margin-bottom: 32px;
+            background: linear-gradient(180deg, #fff 50%, rgba(255, 255, 255, 0.5));
             -webkit-background-clip: text;
             background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         .subtitle {
-            font-size: 20px;
-            color: var(--muted);
-            max-width: 600px;
-            margin: 0 auto 48px;
+            font-size: 22px;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto 56px;
+            font-weight: 400;
         }
 
-        .cta-box {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 8px 16px;
+        .command-bar {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 14px 28px;
+            border-radius: 20px;
             display: inline-flex;
             align-items: center;
-            gap: 16px;
+            gap: 20px;
             font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            margin-bottom: 32px;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(30px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            font-size: 15px;
         }
 
-        .copy-btn {
+        .command-bar span:first-child {
+            color: var(--accent);
+        }
+
+        .copy-trigger {
             background: #fff;
             color: #000;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 800;
             cursor: pointer;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: opacity 0.2s;
+            transition: all 0.2s;
+            font-size: 13px;
         }
 
-        .copy-btn:hover {
-            opacity: 0.9;
+        .copy-trigger:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
         }
 
-        .grid {
+        /* Interactive Docs */
+        .docs-wrapper {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            overflow: hidden;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 24px;
-            margin-top: 80px;
+            grid-template-columns: 320px 1fr;
+            backdrop-filter: blur(20px);
+            margin-bottom: 160px;
+            min-height: 600px;
         }
 
-        .card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 32px;
-            border-radius: 24px;
-            text-align: left;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-        }
-
-        .card h3 {
-            margin-bottom: 12px;
-            font-size: 20px;
-        }
-
-        .card p {
-            color: var(--muted);
-        }
-
-        .code-preview {
-            margin-top: 80px;
-            background: #0d0d0d;
-            border: 1px solid var(--border);
-            border-radius: 24px;
+        .docs-nav {
+            background: rgba(255, 255, 255, 0.01);
+            border-right: 1px solid var(--glass-border);
             padding: 40px;
+        }
+
+        .docs-nav h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            padding: 14px 20px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-secondary);
             text-align: left;
+            cursor: pointer;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.2s;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.03);
+            color: #fff;
+        }
+
+        .tab-btn.active {
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
+            color: var(--accent);
+        }
+
+        .docs-main {
+            padding: 60px;
             position: relative;
         }
 
-        .code-header {
-            display: flex;
-            gap: 8px;
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .docs-main h2 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+
+        .docs-main p {
+            color: var(--text-secondary);
+            font-size: 17px;
+            margin-bottom: 40px;
+        }
+
+        /* Endpoint UI */
+        .endpoint-block {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 24px;
             margin-bottom: 24px;
         }
 
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #333;
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
         }
 
-        pre {
+        .badge-method {
+            padding: 6px 10px;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .endpoint-path {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            color: #fff;
+        }
+
+        .code-container {
+            background: var(--code-bg);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            border: 1px solid var(--glass-border);
+        }
+
+        code {
             font-family: 'JetBrains Mono', monospace;
             font-size: 14px;
-            color: #d946ef;
-            overflow-x: auto;
+            line-height: 1.6;
+            color: var(--text-secondary);
         }
 
-        footer {
-            padding: 80px 0 40px;
-            text-align: center;
-            color: var(--muted);
+        .token-attr {
+            color: #f472b6;
+        }
+
+        .token-str {
+            color: #34d399;
+        }
+
+        .token-com {
+            color: #64748b;
+        }
+
+        /* Error Codes Table */
+        .error-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .error-table th {
+            text-align: left;
+            padding: 16px;
+            border-bottom: 2px solid var(--glass-border);
+            color: #fff;
             font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 40px;
+        .error-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            font-size: 15px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 0 60px;
+            border-top: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        @media (max-width: 900px) {
+            .docs-wrapper {
+                grid-template-columns: 1fr;
             }
 
-            .cta-box {
-                flex-direction: column;
-                width: 100%;
+            .docs-nav {
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
                 padding: 24px;
+            }
+
+            .docs-main {
+                padding: 40px 24px;
             }
         }
     </style>
 </head>
 
 <body>
+    <div class="page-canvas">
+        <div class="mesh-gradient"></div>
+        <canvas id="starfield"></canvas>
+    </div>
+
     <div class="container">
-        <header>
-            <div class="logo">🎵 Music<span>API</span></div>
-            <a href="https://github.com/Nesbesss" style="color: var(--muted); text-decoration: none;">GitHub</a>
-        </header>
+        <nav>
+            <div class="logo"><img src="logo.png" alt="Nova Logo"> NOVA</div>
+            <div class="nav-links">
+                <a href="#docs">Documentation</a>
+                <a href="https://github.com/Nesbesss/music-api" class="github-stars">
+                    <svg height="20" viewBox="0 0 16 16" width="20" fill="currentColor">
+                        <path
+                            d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                        </path>
+                    </svg>
+                    <span>Nova Core</span>
+                    <span id="star-count" style="color: var(--accent);">★ Repo</span>
+                </a>
+            </div>
+        </nav>
 
         <section class="hero">
-            <h1>Build your own<br>music apps.</h1>
-            <p class="subtitle">A frictionless, local-first API core for music streaming, search, and more. Zero-gate
-                access. Open source. Developer ready.</p>
+            <div class="badge">v1.2.0 • Project Nova</div>
+            <h1>The Music Meta.<br>No Gatekeepers.</h1>
+            <p class="subtitle">Deploy your own music streaming backend in seconds. Project Nova is a local-first music
+                engine with zero friction.</p>
 
-            <div class="cta-box">
-                <span style="color: var(--accent)">$</span>
+            <div class="command-bar">
+                <span>$</span>
                 <span>curl -sSL https://nesbes.me/install.sh | bash</span>
-                <button class="copy-btn" onclick="copyCommand()">Copy</button>
+                <button class="copy-trigger" onclick="copyInstall()">Copy</button>
             </div>
         </section>
 
-        <section class="grid">
-            <div class="card">
-                <h3>Zero-Gate</h3>
-                <p>Designed for local development. No API keys, no paywalls, no friction. Just code.</p>
-            </div>
-            <div class="card">
-                <h3>Full SDK</h3>
-                <p>100% coverage with our Python SDK. From search to streaming to playlist sharing.</p>
-            </div>
-            <div class="card">
-                <h3>Production-Ready</h3>
-                <p>Stream music directly with concurrency support and AI-powered lyrics transcription.</p>
-            </div>
-        </section>
+        <div id="docs" class="docs-wrapper">
+            <aside class="docs-nav">
+                <h3>Guides</h3>
+                <button class="tab-btn active" onclick="showTab('concepts')">✦ Core Concepts</button>
+                <button class="tab-btn" onclick="showTab('search')">✦ Search API</button>
+                <button class="tab-btn" onclick="showTab('tracks')">✦ Tracks & Streaming</button>
+                <button class="tab-btn" onclick="showTab('browse')">✦ Browse & Moods</button>
+                <button class="tab-btn" onclick="showTab('sdk')">✦ Python SDK</button>
+                <button class="tab-btn" onclick="showTab('errors')">✦ Error Codes</button>
+            </aside>
 
-        <div class="code-preview">
-            <div class="code-header">
-                <div class="dot" style="background: #ff5f56;"></div>
-                <div class="dot" style="background: #ffbd2e;"></div>
-                <div class="dot" style="background: #27c93f;"></div>
-            </div>
-            <pre>
-# Get started with the Python SDK
-from music_sdk import MusicClient
+            <main class="docs-main">
+                <!-- Core Concepts -->
+                <div id="tab-concepts" class="tab-content active">
+                    <h2>Core Concepts</h2>
+                    <p>Nova is built on the philosophy of "Zero-Gate" development. We remove the middleman between you
+                        and your music metadata.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #22c55e;">INFO</span>
+                            <span class="endpoint-path">Zero Configuration</span>
+                        </div>
+                        <p style="font-size: 15px; margin-bottom: 0;">Nova runs locally or in a private container.
+                            Default access is anonymous—no API keys or headers required in development mode.</p>
+                    </div>
+                </div>
 
-client = MusicClient() # No API key needed for local core
+                <!-- Search API -->
+                <div id="tab-search" class="tab-content">
+                    <h2>Search API</h2>
+                    <p>Powerful multi-source search for tracks, artists, and albums with deep formatting.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/search?q={query}&limit=20</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"tracks"</span>: [
+      {
+        <span class="token-attr">"id"</span>: <span class="token-str">"wPqTMRYtyMw"</span>,
+        <span class="token-attr">"name"</span>: <span class="token-str">"SOLANA"</span>,
+        <span class="token-attr">"artists"</span>: [<span class="token-str">"Alex LeMirage"</span>],
+        <span class="token-attr">"album"</span>: <span class="token-str">"Music from the Stars"</span>
+      }
+    ]
+  }
+}</code></pre>
+                        </div>
+                    </div>
+                </div>
 
-results = client.search("Solana")
-track = results['data']['results'][0]
+                <!-- Tracks API -->
+                <div id="tab-tracks" class="tab-content">
+                    <h2>Tracks & Streaming</h2>
+                    <p>The core of Nova. High-fidelity audio streaming with metadata parity.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #f59e0b;">STREAM</span>
+                            <span class="endpoint-path">/api/v1/tracks/stream/{id}</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns an optimized <code>audio/webm</code> or
+                            <code>audio/m4a</code> stream directly from the engine.</p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/tracks/{id}</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns detailed metadata, including high-res thumbnails and track
+                            duration.</p>
+                    </div>
+                </div>
 
-print(f"Now streaming: {track['title']}")
-stream_url = client.get_stream_url(track['videoId'])
-            </pre>
+                <!-- Browse API -->
+                <div id="tab-browse" class="tab-content">
+                    <h2>Browse & Moods</h2>
+                    <p>Explore charts, trending songs, and categorized genre playlists.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/browse/trending?region=US</span>
+                        </div>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/browse/genres</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SDK Usage -->
+                <div id="tab-sdk" class="tab-content">
+                    <h2>Python SDK</h2>
+                    <p>The most elegant way to interact with Nova. Zero-config by default.</p>
+                    <div class="code-container">
+                        <pre><code><span class="token-com"># Installation: pip install nova-music-sdk</span>
+<span class="token-keyword">from</span> nova <span class="token-keyword">import</span> NovaClient
+
+<span class="token-com"># Connect to local core</span>
+client = NovaClient()
+
+<span class="token-com"># Integrated search & stream</span>
+results = client.search(<span class="token-str">"Solana"</span>)
+track_url = client.get_stream_url(results[<span class="token-str">'data'</span>][<span class="token-str">'tracks'</span>][<span class="token-number">0</span>][<span class="token-str">'id'</span>])</code></pre>
+                    </div>
+                </div>
+
+                <!-- Error Codes -->
+                <div id="tab-errors" class="tab-content">
+                    <h2>Error Codes</h2>
+                    <p>Nova uses structured JSON error responses with unique codes for debugging.</p>
+                    <table class="error-table">
+                        <thead>
+                            <tr>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Context</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">TRACK_ERROR</td>
+                                <td>500</td>
+                                <td>Upstream source unreachable.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">MISSING_QUERY</td>
+                                <td>400</td>
+                                <td>Search requires the 'q' parameter.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">FORBIDDEN</td>
+                                <td>403</td>
+                                <td>IP blocked or API Key invalid.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">NOT_FOUND</td>
+                                <td>404</td>
+                                <td>The requested entity was not found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </main>
         </div>
 
         <footer>
-            &copy; 2026 nesbes.me &bull; Music API Platform
+            <div class="logo" style="justify-content: center; margin-bottom: 24px;">
+                <img src="logo.png" alt="Nova Logo"> NOVA
+            </div>
+            <p style="color: var(--text-secondary); font-size: 14px;">Project Nova &bull; MIT Licensed &bull; Created by
+                <a href="https://github.com/Nesbesss" style="color: #fff; text-decoration: none;">@Nesbesss</a></p>
         </footer>
     </div>
 
     <script>
-        function copyCommand() {
+        // Starfield Effect
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            initStars();
+        }
+
+        function initStars() {
+            stars = [];
+            const count = Math.floor(window.innerWidth / 10);
+            for (let i = 0; i < count; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 1.5,
+                    speed: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#fff';
+            stars.forEach(star => {
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                star.y -= star.speed;
+                if (star.y < -10) star.y = canvas.height + 10;
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', resize);
+        resize();
+        animate();
+
+        // Tab System
+        function showTab(id) {
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+            document.getElementById('tab-' + id).classList.add('active');
+            event.currentTarget.classList.add('active');
+
+            // Subtle scroll on mobile
+            if (window.innerWidth < 900) {
+                document.querySelector('.docs-main').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        function copyInstall() {
             navigator.clipboard.writeText('curl -sSL https://nesbes.me/install.sh | bash');
-            const btn = document.querySelector('.copy-btn');
-            btn.innerText = 'Copied!';
+            const btn = document.querySelector('.copy-trigger');
+            btn.innerText = 'Copied! ✨';
             setTimeout(() => btn.innerText = 'Copy', 2000);
         }
+
+        // Fetch Live GitHub Stars
+        async function fetchStars() {
+            try {
+                const res = await fetch('https://api.github.com/repos/Nesbesss/music-api');
+                const data = await res.json();
+                if (data.stargazers_count !== undefined) {
+                    document.getElementById('star-count').innerText = '★ ' + data.stargazers_count;
+                }
+            } catch (e) { console.error('Failed to fetch stars'); }
+        }
+        fetchStars();
     </script>
 </body>
 

@@ -1,12 +1,12 @@
-# 🎵 Music API Platform
+# 🎵 Project Nova
 
 A production-ready, local-first developer platform for streaming music from YouTube Music. Designed for developers who want to build their own music applications without friction.
 
 ## 🚀 Experience the "Zero-Gate"
-Music API Core is built for local development. By default, it allows anonymous access, meaning you can integrate it into your apps instantly without needing API keys or payment.
+Project Nova is built for local development. By default, it allows anonymous access, meaning you can integrate it into your apps instantly without needing API keys or payment.
 
 ## 📦 Project Structure
-- **`core/`**: The lightweight REST API engine.
+- **`core/`**: The lightweight Project Nova API engine.
 - **`sdk/`**: The official Python SDK with 100% coverage.
 - **`web/`**: The premium landing page and one-liner installer.
 
