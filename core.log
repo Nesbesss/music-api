@@ -29,3 +29,9 @@
 127.0.0.1 - - [01/Feb/2026 21:16:47] "GET /player/ HTTP/1.1" 200 -
 127.0.0.1 - - [01/Feb/2026 21:16:47] "GET /static/logo.png HTTP/1.1" 200 -
 127.0.0.1 - - [01/Feb/2026 21:16:51] "[32mGET /player HTTP/1.1[0m" 308 -
+127.0.0.1 - - [01/Feb/2026 21:17:28] "[32mGET /player HTTP/1.1[0m" 308 -
+127.0.0.1 - - [01/Feb/2026 21:17:28] "GET /player/ HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:17:28] "GET /static/logo.png HTTP/1.1" 200 -
+127.0.0.1 - - [01/Feb/2026 21:17:28] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+[2026-02-01 21:17:34,420] WARNING in cache: Redis unavailable, using memory cache: No module named 'redis'
+127.0.0.1 - - [01/Feb/2026 21:17:35] "GET /api/v1/search?q=Starboy HTTP/1.1" 200 -

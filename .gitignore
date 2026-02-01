@@ -46,3 +46,5 @@ core/playlist_shares/
 # Gemini/Brain (Internal)
 .gemini/
 brain/
+.vercel
+.env*.local
