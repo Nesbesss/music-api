@@ -12,7 +12,7 @@ class UsageLog(db.Model):
     __tablename__ = 'usage_logs'
     
     id = db.Column(db.Integer, primary_key=True)
-    api_key_id = db.Column(db.Integer, db.ForeignKey('api_keys.id'), nullable=False, index=True)
+    api_key_id = db.Column(db.Integer, nullable=True, index=True)  # Optional for Zero-Gate
     
     # Request info
     endpoint = db.Column(db.String(255), nullable=False)
@@ -22,9 +22,6 @@ class UsageLog(db.Model):
     
     # Timestamp
     timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
-    
-    # Relationship
-    api_key = db.relationship('APIKey', backref=db.backref('usage_logs', lazy='dynamic'))
     
     def __repr__(self):
         return f'<UsageLog {self.endpoint} @ {self.timestamp}>'
