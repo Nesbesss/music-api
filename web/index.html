@@ -461,50 +461,118 @@
         <div id="docs" class="docs-wrapper">
             <aside class="docs-nav">
                 <h3>Guides</h3>
-                <button class="tab-btn active" onclick="showTab('concepts')">✦ Core Concepts</button>
+                <button class="tab-btn active" onclick="showTab('quickstart')">✦ Quick Start</button>
                 <button class="tab-btn" onclick="showTab('search')">✦ Search API</button>
                 <button class="tab-btn" onclick="showTab('tracks')">✦ Tracks & Streaming</button>
-                <button class="tab-btn" onclick="showTab('browse')">✦ Browse & Moods</button>
-                <button class="tab-btn" onclick="showTab('sdk')">✦ Python SDK</button>
-                <button class="tab-btn" onclick="showTab('cli')">✦ Nova CLI</button>
-                <button class="tab-btn" onclick="showTab('errors')">✦ Error Codes</button>
+                <button class="tab-btn" onclick="showTab('lyrics')">✦ Lyrics API</button>
+                <button class="tab-btn" onclick="showTab('browse')">✦ Browse & Discovery</button>
+                <button class="tab-btn" onclick="showTab('artists')">✦ Artists API</button>
+                <button class="tab-btn" onclick="showTab('playlists')">✦ Playlists</button>
+                <button class="tab-btn" onclick="showTab('schemas')">✦ Data Schemas</button>
+                <button class="tab-btn" onclick="showTab('examples')">✦ Code Examples</button>
+                <button class="tab-btn" onclick="showTab('errors')">✦ Error Handling</button>
             </aside>
 
             <main class="docs-main">
-                <!-- Core Concepts -->
-                <div id="tab-concepts" class="tab-content active">
-                    <h2>Core Concepts</h2>
-                    <p>Nova is built on the philosophy of "Zero-Gate" development. We remove the middleman between you
-                        and your music metadata. Run it locally via <code>novam</code> and search instantly via the
-                        <strong>Nova Player</strong>.</p>
+                <!-- Quick Start -->
+                <div id="tab-quickstart" class="tab-content active">
+                    <h2>Quick Start</h2>
+                    <p>Get Nova running in under 60 seconds. Zero configuration required.</p>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
-                            <span class="badge-method" style="background: #22c55e;">INFO</span>
-                            <span class="endpoint-path">Zero Configuration</span>
+                            <span class="badge-method" style="background: #22c55e;">INSTALL</span>
+                            <span class="endpoint-path">One-line installer</span>
                         </div>
-                        <p style="font-size: 15px; margin-bottom: 0;">Nova runs locally or in a private container.
-                            Default access is anonymous—no API keys or headers required in development mode.</p>
+                        <div class="code-container">
+                            <pre><code>curl -sSL https://nesbes.me/install.sh | bash</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: var(--accent);">CLI</span>
+                            <span class="endpoint-path">Start the Dashboard</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code><span class="token-com"># Start API + open dashboard</span>
+./novam dashboard
+
+<span class="token-com"># Or just start API (headless)</span>
+./novam api
+
+<span class="token-com"># Update to latest version</span>
+./novam update</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">BASE URL</span>
+                            <span class="endpoint-path">API Endpoint</span>
+                        </div>
+                        <p style="font-size: 15px; margin-bottom: 0;">
+                            <code>http://localhost:5001/api/v1</code><br><br>
+                            All endpoints are prefixed with <code>/api/v1</code>. No API key required in development
+                            mode (Zero-Gate access).
+                        </p>
                     </div>
                 </div>
 
                 <!-- Search API -->
                 <div id="tab-search" class="tab-content">
                     <h2>Search API</h2>
-                    <p>Powerful multi-source search for tracks, artists, and albums with deep formatting.</p>
+                    <p>Universal music search across tracks, artists, albums. Returns rich metadata with album art,
+                        duration, and IDs.</p>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method">GET</span>
-                            <span class="endpoint-path">/api/v1/search?q={query}&limit=20</span>
+                            <span class="endpoint-path">/api/v1/search</span>
                         </div>
+                        <p style="font-size: 14px;"><strong>Query Parameters:</strong></p>
+                        <table class="error-table" style="margin-bottom: 16px;">
+                            <tr>
+                                <td><code>q</code></td>
+                                <td>string</td>
+                                <td><strong>Required.</strong> Search query (song name, artist, etc.)</td>
+                            </tr>
+                            <tr>
+                                <td><code>limit</code></td>
+                                <td>int</td>
+                                <td>Max results (default: 20, max: 50)</td>
+                            </tr>
+                            <tr>
+                                <td><code>type</code></td>
+                                <td>string</td>
+                                <td>Filter: "tracks", "artists", "albums" (default: all)</td>
+                            </tr>
+                        </table>
                         <div class="code-container">
-                            <pre><code>{
+                            <pre><code><span class="token-com">// GET /api/v1/search?q=Blinding+Lights&limit=5</span>
+{
+  <span class="token-attr">"success"</span>: true,
   <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"total"</span>: 5,
     <span class="token-attr">"tracks"</span>: [
       {
-        <span class="token-attr">"id"</span>: <span class="token-str">"wPqTMRYtyMw"</span>,
-        <span class="token-attr">"name"</span>: <span class="token-str">"SOLANA"</span>,
-        <span class="token-attr">"artists"</span>: [<span class="token-str">"Alex LeMirage"</span>],
-        <span class="token-attr">"album"</span>: <span class="token-str">"Music from the Stars"</span>
+        <span class="token-attr">"id"</span>: <span class="token-str">"4NhPJTK8cAq7uOa7SBGC9H"</span>,
+        <span class="token-attr">"name"</span>: <span class="token-str">"Blinding Lights"</span>,
+        <span class="token-attr">"duration_ms"</span>: 200040,
+        <span class="token-attr">"explicit"</span>: false,
+        <span class="token-attr">"artists"</span>: [
+          {
+            <span class="token-attr">"id"</span>: <span class="token-str">"1Xyo4u8uXC1ZmMpatF05PJ"</span>,
+            <span class="token-attr">"name"</span>: <span class="token-str">"The Weeknd"</span>
+          }
+        ],
+        <span class="token-attr">"album"</span>: {
+          <span class="token-attr">"id"</span>: <span class="token-str">"4yP0hdKOZPNshxUOjY0cZj"</span>,
+          <span class="token-attr">"name"</span>: <span class="token-str">"After Hours"</span>,
+          <span class="token-attr">"images"</span>: [
+            {<span class="token-attr">"url"</span>: <span class="token-str">"https://..."</span>, <span class="token-attr">"width"</span>: 640, <span class="token-attr">"height"</span>: 640}
+          ]
+        }
       }
     ]
   }
@@ -516,123 +584,417 @@
                 <!-- Tracks API -->
                 <div id="tab-tracks" class="tab-content">
                     <h2>Tracks & Streaming</h2>
-                    <p>The core of Nova. High-fidelity audio streaming with metadata parity.</p>
+                    <p>Stream audio and retrieve detailed track metadata. The stream endpoint returns raw audio data.
+                    </p>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method" style="background: #f59e0b;">STREAM</span>
                             <span class="endpoint-path">/api/v1/tracks/stream/{id}</span>
                         </div>
-                        <p style="font-size: 14px;">Returns an optimized <code>audio/webm</code> or
-                            <code>audio/m4a</code> stream directly from the engine.
+                        <p style="font-size: 14px;">
+                            Returns raw audio stream. Content-Type: <code>audio/webm</code> or
+                            <code>audio/m4a</code>.<br>
+                            Use in <code>&lt;audio src="..."&gt;</code> or download directly.
                         </p>
+                        <div class="code-container">
+                            <pre><code><span class="token-com"># Stream to file (bash)</span>
+curl -o song.m4a "http://localhost:5001/api/v1/tracks/stream/4NhPJTK8cAq7"
+
+<span class="token-com"># Python download</span>
+import requests
+r = requests.get(f"{API}/api/v1/tracks/stream/{track_id}", stream=True)
+with open("song.m4a", "wb") as f:
+    for chunk in r.iter_content(8192):
+        f.write(chunk)</code></pre>
+                        </div>
                     </div>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method">GET</span>
                             <span class="endpoint-path">/api/v1/tracks/{id}</span>
                         </div>
-                        <p style="font-size: 14px;">Returns detailed metadata, including high-res thumbnails and track
-                            duration.</p>
+                        <p style="font-size: 14px;">Returns full track metadata including duration, album art, and
+                            artist info.</p>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"id"</span>: <span class="token-str">"4NhPJTK8cAq7"</span>,
+    <span class="token-attr">"name"</span>: <span class="token-str">"Blinding Lights"</span>,
+    <span class="token-attr">"duration_ms"</span>: 200040,
+    <span class="token-attr">"artists"</span>: [{<span class="token-attr">"id"</span>: <span class="token-str">"..."</span>, <span class="token-attr">"name"</span>: <span class="token-str">"The Weeknd"</span>}],
+    <span class="token-attr">"album"</span>: {
+      <span class="token-attr">"name"</span>: <span class="token-str">"After Hours"</span>,
+      <span class="token-attr">"images"</span>: [{<span class="token-attr">"url"</span>: <span class="token-str">"https://..."</span>}]
+    },
+    <span class="token-attr">"thumbnail"</span>: <span class="token-str">"https://i.ytimg.com/vi/.../maxresdefault.jpg"</span>
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/tracks/{id}/thumbnail</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns high-resolution album artwork. Redirects to image URL.</p>
+                    </div>
+                </div>
+
+                <!-- Lyrics API -->
+                <div id="tab-lyrics" class="tab-content">
+                    <h2>Lyrics API</h2>
+                    <p>Fetch song lyrics. Supports auto-transcription via Whisper AI for tracks without lyrics.</p>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/lyrics/{track_id}</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"track_id"</span>: <span class="token-str">"4NhPJTK8cAq7"</span>,
+    <span class="token-attr">"lyrics"</span>: <span class="token-str">"I've been tryna call\nI've been on my own for long enough..."</span>,
+    <span class="token-attr">"source"</span>: <span class="token-str">"genius"</span>,
+    <span class="token-attr">"synced"</span>: false
+  }
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #8b5cf6;">POST</span>
+                            <span class="endpoint-path">/api/v1/lyrics/{track_id}/transcribe</span>
+                        </div>
+                        <p style="font-size: 14px;">
+                            AI-powered transcription using Whisper. Generates lyrics from audio when none are
+                            available.<br>
+                            <strong>Note:</strong> Takes 10-30 seconds depending on track length.
+                        </p>
                     </div>
                 </div>
 
                 <!-- Browse API -->
                 <div id="tab-browse" class="tab-content">
-                    <h2>Browse & Moods</h2>
-                    <p>Explore charts, trending songs, and categorized genre playlists.</p>
+                    <h2>Browse & Discovery</h2>
+                    <p>Explore trending music, genres, and get AI-powered recommendations.</p>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method">GET</span>
-                            <span class="endpoint-path">/api/v1/browse/trending?region=US</span>
+                            <span class="endpoint-path">/api/v1/browse/trending</span>
                         </div>
+                        <p style="font-size: 14px;"><strong>Query:</strong> <code>?region=US</code> (ISO country code)
+                        </p>
+                        <p style="font-size: 14px;">Returns trending tracks for the specified region.</p>
                     </div>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method">GET</span>
                             <span class="endpoint-path">/api/v1/browse/genres</span>
                         </div>
+                        <p style="font-size: 14px;">Returns all available genre categories with playlist IDs.</p>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/browse/recommendations/{track_id}</span>
+                        </div>
+                        <p style="font-size: 14px;">Get similar tracks based on a seed track. Great for "radio"
+                            features.</p>
                     </div>
                 </div>
 
-                <!-- SDK Usage -->
-                <div id="tab-sdk" class="tab-content">
-                    <h2>Python SDK</h2>
-                    <p>The most elegant way to interact with Nova. Zero-config by default.</p>
-                    <div class="code-container">
-                        <pre><code><span class="token-com"># Installation: pip install nova-music-sdk</span>
-<span class="token-keyword">from</span> nova <span class="token-keyword">import</span> NovaClient
+                <!-- Artists API -->
+                <div id="tab-artists" class="tab-content">
+                    <h2>Artists API</h2>
+                    <p>Get artist profiles, top tracks, albums, and related artists.</p>
 
-<span class="token-com"># Connect to local core</span>
-client = NovaClient()
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/artists/{id}</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"data"</span>: {
+    <span class="token-attr">"id"</span>: <span class="token-str">"1Xyo4u8uXC1ZmMpatF05PJ"</span>,
+    <span class="token-attr">"name"</span>: <span class="token-str">"The Weeknd"</span>,
+    <span class="token-attr">"description"</span>: <span class="token-str">"Canadian singer-songwriter..."</span>,
+    <span class="token-attr">"images"</span>: [{<span class="token-attr">"url"</span>: <span class="token-str">"https://..."</span>}],
+    <span class="token-attr">"subscribers"</span>: <span class="token-str">"35M"</span>
+  }
+}</code></pre>
+                        </div>
+                    </div>
 
-<span class="token-com"># Integrated search & stream</span>
-results = client.search(<span class="token-str">"Solana"</span>)
-track_url = client.get_stream_url(results[<span class="token-str">'data'</span>][<span class="token-str">'tracks'</span>][<span class="token-number">0</span>][<span class="token-str">'id'</span>])</code></pre>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/artists/{id}/top-tracks</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns the artist's most popular tracks.</p>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/artists/{id}/albums</span>
+                        </div>
+                        <p style="font-size: 14px;">Returns all albums and singles by the artist.</p>
                     </div>
                 </div>
 
-                <!-- Nova CLI -->
-                <div id="tab-cli" class="tab-content">
-                    <h2>Nova CLI (novam)</h2>
-                    <p>The <code>novam</code> utility is the heartbeat of the Nova ecosystem. Manage your engine,
-                        player, and updates from the terminal.</p>
+                <!-- Playlists API -->
+                <div id="tab-playlists" class="tab-content">
+                    <h2>Playlists</h2>
+                    <p>Create, manage, and share playlists. Get tracks from existing playlists.</p>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
-                            <span class="badge-method" style="background: var(--accent);">novam player</span>
-                            <span class="endpoint-path">Open Music UI</span>
+                            <span class="badge-method">GET</span>
+                            <span class="endpoint-path">/api/v1/playlists/{id}</span>
                         </div>
-                        <p style="font-size: 14px;">Automatically starts the engine and opens the <strong>Nova
-                                Player</strong> in your browser.</p>
+                        <p style="font-size: 14px;">Get playlist details and all tracks.</p>
                     </div>
+
                     <div class="endpoint-block">
                         <div class="endpoint-header">
-                            <span class="badge-method" style="background: #22c55e;">novam api</span>
-                            <span class="endpoint-path">Headless Mode</span>
+                            <span class="badge-method" style="background: #8b5cf6;">POST</span>
+                            <span class="endpoint-path">/api/v1/playlists</span>
                         </div>
-                        <p style="font-size: 14px;">Starts the core API server for background service integrations.</p>
-                    </div>
-                    <div class="endpoint-block">
-                        <div class="endpoint-header">
-                            <span class="badge-method" style="background: #f59e0b;">novam update</span>
-                            <span class="endpoint-path">Sync Features</span>
+                        <p style="font-size: 14px;"><strong>Body:</strong></p>
+                        <div class="code-container">
+                            <pre><code>{
+  <span class="token-attr">"name"</span>: <span class="token-str">"My Playlist"</span>,
+  <span class="token-attr">"description"</span>: <span class="token-str">"Best vibes"</span>,
+  <span class="token-attr">"tracks"</span>: [<span class="token-str">"track_id_1"</span>, <span class="token-str">"track_id_2"</span>]
+}</code></pre>
                         </div>
-                        <p style="font-size: 14px;">Pulls the latest engine improvements and security patches from
-                            GitHub.</p>
                     </div>
                 </div>
 
-                <!-- Error Codes -->
+                <!-- Data Schemas -->
+                <div id="tab-schemas" class="tab-content">
+                    <h2>Data Schemas</h2>
+                    <p>Complete TypeScript/JSON schemas for all data types. Feed this to your AI.</p>
+
+                    <div class="code-container" style="max-height: 500px; overflow-y: auto;">
+                        <pre><code><span class="token-com">// TypeScript Schemas for Nova API</span>
+
+interface Track {
+  id: string;                    <span class="token-com">// Unique track identifier</span>
+  name: string;                  <span class="token-com">// Track title</span>
+  duration_ms: number;           <span class="token-com">// Duration in milliseconds</span>
+  explicit: boolean;             <span class="token-com">// Explicit content flag</span>
+  artists: Artist[];             <span class="token-com">// Array of artists</span>
+  album: Album;                  <span class="token-com">// Album info</span>
+  thumbnail?: string;            <span class="token-com">// Direct image URL</span>
+}
+
+interface Artist {
+  id: string;                    <span class="token-com">// Unique artist identifier</span>
+  name: string;                  <span class="token-com">// Artist/band name</span>
+  images?: Image[];              <span class="token-com">// Profile images</span>
+  description?: string;          <span class="token-com">// Bio/description</span>
+  subscribers?: string;          <span class="token-com">// Subscriber count</span>
+}
+
+interface Album {
+  id: string;                    <span class="token-com">// Unique album identifier</span>
+  name: string;                  <span class="token-com">// Album title</span>
+  images: Image[];               <span class="token-com">// Cover art (multiple sizes)</span>
+  release_date?: string;         <span class="token-com">// Release date (YYYY-MM-DD)</span>
+  total_tracks?: number;         <span class="token-com">// Number of tracks</span>
+}
+
+interface Image {
+  url: string;                   <span class="token-com">// Image URL</span>
+  width: number;                 <span class="token-com">// Width in pixels</span>
+  height: number;                <span class="token-com">// Height in pixels</span>
+}
+
+interface SearchResponse {
+  success: boolean;
+  data: {
+    total: number;               <span class="token-com">// Total results found</span>
+    tracks: Track[];             <span class="token-com">// Array of tracks</span>
+  }
+}
+
+interface Lyrics {
+  track_id: string;
+  lyrics: string;                <span class="token-com">// Full lyrics text</span>
+  source: string;                <span class="token-com">// "genius" | "transcribed"</span>
+  synced: boolean;               <span class="token-com">// Time-synced lyrics available</span>
+}
+
+interface ErrorResponse {
+  success: false;
+  error: {
+    code: string;                <span class="token-com">// Error code (see Error Handling)</span>
+    message: string;             <span class="token-com">// Human-readable message</span>
+  }
+}</code></pre>
+                    </div>
+                </div>
+
+                <!-- Code Examples -->
+                <div id="tab-examples" class="tab-content">
+                    <h2>Code Examples</h2>
+                    <p>Copy-paste examples for common use cases. Perfect for AI-assisted development.</p>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #3572A5;">PYTHON</span>
+                            <span class="endpoint-path">Search & Download</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>import requests
+
+API = "http://localhost:5001/api/v1"
+
+<span class="token-com"># Search for a song</span>
+results = requests.get(f"{API}/search", params={"q": "Blinding Lights"}).json()
+track = results["data"]["tracks"][0]
+
+print(f"Found: {track['name']} by {track['artists'][0]['name']}")
+
+<span class="token-com"># Download the track</span>
+audio = requests.get(f"{API}/tracks/stream/{track['id']}", stream=True)
+with open(f"{track['name']}.m4a", "wb") as f:
+    for chunk in audio.iter_content(8192):
+        f.write(chunk)
+
+print("Download complete!")</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #f7df1e; color: #000;">JS</span>
+                            <span class="endpoint-path">Browser Player</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code>const API = "http://localhost:5001/api/v1";
+
+async function playTrack(query) {
+  <span class="token-com">// Search</span>
+  const res = await fetch(`${API}/search?q=${encodeURIComponent(query)}`);
+  const { data } = await res.json();
+  const track = data.tracks[0];
+
+  <span class="token-com">// Play in audio element</span>
+  const audio = new Audio(`${API}/tracks/stream/${track.id}`);
+  audio.play();
+
+  <span class="token-com">// Show info</span>
+  console.log(`Now playing: ${track.name} by ${track.artists[0].name}`);
+  console.log(`Album art: ${track.album.images[0].url}`);
+}
+
+playTrack("Starboy");</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #00ADD8;">cURL</span>
+                            <span class="endpoint-path">Quick Commands</span>
+                        </div>
+                        <div class="code-container">
+                            <pre><code><span class="token-com"># Search</span>
+curl "http://localhost:5001/api/v1/search?q=Drake&limit=5"
+
+<span class="token-com"># Get track info</span>
+curl "http://localhost:5001/api/v1/tracks/4NhPJTK8cAq7"
+
+<span class="token-com"># Download audio</span>
+curl -o song.m4a "http://localhost:5001/api/v1/tracks/stream/4NhPJTK8cAq7"
+
+<span class="token-com"># Get lyrics</span>
+curl "http://localhost:5001/api/v1/lyrics/4NhPJTK8cAq7"
+
+<span class="token-com"># Get recommendations</span>
+curl "http://localhost:5001/api/v1/browse/recommendations/4NhPJTK8cAq7"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Error Handling -->
                 <div id="tab-errors" class="tab-content">
-                    <h2>Error Codes</h2>
-                    <p>Nova uses structured JSON error responses with unique codes for debugging.</p>
+                    <h2>Error Handling</h2>
+                    <p>All errors return JSON with a consistent structure. Use the code for programmatic handling.</p>
+
+                    <div class="code-container" style="margin-bottom: 24px;">
+                        <pre><code>{
+  <span class="token-attr">"success"</span>: false,
+  <span class="token-attr">"error"</span>: {
+    <span class="token-attr">"code"</span>: <span class="token-str">"TRACK_NOT_FOUND"</span>,
+    <span class="token-attr">"message"</span>: <span class="token-str">"The requested track could not be found."</span>
+  }
+}</code></pre>
+                    </div>
+
                     <table class="error-table">
                         <thead>
                             <tr>
                                 <th>Code</th>
-                                <th>Status</th>
-                                <th>Context</th>
+                                <th>HTTP</th>
+                                <th>Description</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td style="color: var(--accent); font-weight: 700;">TRACK_ERROR</td>
-                                <td>500</td>
-                                <td>Upstream source unreachable.</td>
-                            </tr>
-                            <tr>
                                 <td style="color: var(--accent); font-weight: 700;">MISSING_QUERY</td>
                                 <td>400</td>
-                                <td>Search requires the 'q' parameter.</td>
+                                <td>The 'q' query parameter is required for search.</td>
                             </tr>
                             <tr>
-                                <td style="color: var(--accent); font-weight: 700;">FORBIDDEN</td>
-                                <td>403</td>
-                                <td>IP blocked or API Key invalid.</td>
+                                <td style="color: var(--accent); font-weight: 700;">INVALID_LIMIT</td>
+                                <td>400</td>
+                                <td>Limit must be between 1 and 50.</td>
                             </tr>
                             <tr>
-                                <td style="color: var(--accent); font-weight: 700;">NOT_FOUND</td>
+                                <td style="color: var(--accent); font-weight: 700;">TRACK_NOT_FOUND</td>
                                 <td>404</td>
-                                <td>The requested entity was not found.</td>
+                                <td>Track ID does not exist or is unavailable.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">ARTIST_NOT_FOUND</td>
+                                <td>404</td>
+                                <td>Artist ID does not exist.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">PLAYLIST_NOT_FOUND</td>
+                                <td>404</td>
+                                <td>Playlist ID does not exist or is private.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">LYRICS_NOT_FOUND</td>
+                                <td>404</td>
+                                <td>No lyrics available. Consider using /transcribe.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">STREAM_ERROR</td>
+                                <td>500</td>
+                                <td>Failed to fetch audio stream from source.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">RATE_LIMITED</td>
+                                <td>429</td>
+                                <td>Too many requests. Wait and retry.</td>
+                            </tr>
+                            <tr>
+                                <td style="color: var(--accent); font-weight: 700;">UPSTREAM_ERROR</td>
+                                <td>502</td>
+                                <td>Source service is temporarily unavailable.</td>
                             </tr>
                         </tbody>
                     </table>
