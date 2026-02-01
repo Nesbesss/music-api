@@ -448,8 +448,8 @@
         <section class="hero">
             <div class="badge">v1.2.0 • Project Nova</div>
             <h1>The Music Meta.<br>No Gatekeepers.</h1>
-            <p class="subtitle">Deploy your own music streaming backend in seconds. Project Nova is a local-first music
-                engine with zero friction.</p>
+            <p class="subtitle">Search, stream, and manage your music meta with a single command. Project Nova is a
+                local-first ecosystem featuring the <strong>novam</strong> CLI and <strong>Nova Player</strong> UI.</p>
 
             <div class="command-bar">
                 <span>$</span>
@@ -466,6 +466,7 @@
                 <button class="tab-btn" onclick="showTab('tracks')">✦ Tracks & Streaming</button>
                 <button class="tab-btn" onclick="showTab('browse')">✦ Browse & Moods</button>
                 <button class="tab-btn" onclick="showTab('sdk')">✦ Python SDK</button>
+                <button class="tab-btn" onclick="showTab('cli')">✦ Nova CLI</button>
                 <button class="tab-btn" onclick="showTab('errors')">✦ Error Codes</button>
             </aside>
 
@@ -474,7 +475,8 @@
                 <div id="tab-concepts" class="tab-content active">
                     <h2>Core Concepts</h2>
                     <p>Nova is built on the philosophy of "Zero-Gate" development. We remove the middleman between you
-                        and your music metadata.</p>
+                        and your music metadata. Run it locally via <code>novam</code> and search instantly via the
+                        <strong>Nova Player</strong>.</p>
                     <div class="endpoint-block">
                         <div class="endpoint-header">
                             <span class="badge-method" style="background: #22c55e;">INFO</span>
@@ -521,7 +523,8 @@
                             <span class="endpoint-path">/api/v1/tracks/stream/{id}</span>
                         </div>
                         <p style="font-size: 14px;">Returns an optimized <code>audio/webm</code> or
-                            <code>audio/m4a</code> stream directly from the engine.</p>
+                            <code>audio/m4a</code> stream directly from the engine.
+                        </p>
                     </div>
                     <div class="endpoint-block">
                         <div class="endpoint-header">
@@ -565,6 +568,36 @@ client = NovaClient()
 <span class="token-com"># Integrated search & stream</span>
 results = client.search(<span class="token-str">"Solana"</span>)
 track_url = client.get_stream_url(results[<span class="token-str">'data'</span>][<span class="token-str">'tracks'</span>][<span class="token-number">0</span>][<span class="token-str">'id'</span>])</code></pre>
+                    </div>
+                </div>
+
+                <!-- Nova CLI -->
+                <div id="tab-cli" class="tab-content">
+                    <h2>Nova CLI (novam)</h2>
+                    <p>The <code>novam</code> utility is the heartbeat of the Nova ecosystem. Manage your engine,
+                        player, and updates from the terminal.</p>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: var(--accent);">novam player</span>
+                            <span class="endpoint-path">Open Music UI</span>
+                        </div>
+                        <p style="font-size: 14px;">Automatically starts the engine and opens the <strong>Nova
+                                Player</strong> in your browser.</p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #22c55e;">novam api</span>
+                            <span class="endpoint-path">Headless Mode</span>
+                        </div>
+                        <p style="font-size: 14px;">Starts the core API server for background service integrations.</p>
+                    </div>
+                    <div class="endpoint-block">
+                        <div class="endpoint-header">
+                            <span class="badge-method" style="background: #f59e0b;">novam update</span>
+                            <span class="endpoint-path">Sync Features</span>
+                        </div>
+                        <p style="font-size: 14px;">Pulls the latest engine improvements and security patches from
+                            GitHub.</p>
                     </div>
                 </div>
 
@@ -612,7 +645,8 @@ track_url = client.get_stream_url(results[<span class="token-str">'data'</span>]
                 <img src="logo.png" alt="Nova Logo"> NOVA
             </div>
             <p style="color: var(--text-secondary); font-size: 14px;">Project Nova &bull; MIT Licensed &bull; Created by
-                <a href="https://github.com/Nesbesss" style="color: #fff; text-decoration: none;">@Nesbesss</a></p>
+                <a href="https://github.com/Nesbesss" style="color: #fff; text-decoration: none;">@Nesbesss</a>
+            </p>
         </footer>
     </div>
 
