@@ -3,7 +3,7 @@
 A production-ready, local-first developer platform for streaming music from YouTube Music. Designed for developers who want to build their own music applications without friction.
 
 ## 🚀 Experience the "Zero-Gate"
-Project Nova is built for local development. By default, it allows anonymous access, meaning you can integrate it into your apps instantly without needing API keys or payment.
+Project Nova is built for local development. By default, it allows anonymous access, meaning you can integrate it into your apps instantly without needing API keys or payment. ALSO BEFORE PEOPLE SAYIN UUH YH YOU MADE IT WITH AI, IMMA BE HONEST ON THA POINT I USED AI TO RECODE MY FILES CUZ IT WAS MESSY AS HELLY
 
 ## 📦 Project Structure
 - **`core/`**: The lightweight Project Nova API engine.
